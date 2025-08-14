@@ -116,6 +116,7 @@ body {
     to { opacity: 1; }
 }
 
+
 /* Loading Screen */
 .loading-screen {
     position: fixed;
@@ -433,7 +434,47 @@ body {
     font-size: 0.75rem;
     font-family: 'Courier New', monospace;
 }
+/* Google Login Button Wrapper */
+.oauth-buttons {
+    margin-top: 20px; /* more space from Sign In/Sign Up button */
+    display: flex;
+    justify-content: center; /* center horizontally */
+}
 
+/* Google Login Button */
+.google-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: white;
+    color: #555;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    padding: 1rem; /* Match Sign In button padding */
+    border-radius: 0.375rem; /* Match Sign In button border radius */
+    cursor: pointer;
+    width: 100%; /* match Sign In button width */
+    max-width: 300px; /* prevent too wide */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+    margin-top: 10px; /* space from above */
+}
+
+.google-button:hover {
+    background: #f8f8f8;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.google-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* ---------------------------------------------------------------------- */
 /* Plan Selection Styles */
 .plan-background {
     position: absolute;
@@ -1741,4 +1782,6 @@ body {
     .user-details {
         display: none;
     }
+
+
 }

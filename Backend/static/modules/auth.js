@@ -41,14 +41,18 @@ export class AuthModule {
 
         if (googleLoginBtn) {
             googleLoginBtn.addEventListener('click', async () => {
-                const { error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin + '/dashboard'
+                try {
+                    const { error } = await supabase.auth.signInWithOAuth({
+                        provider: 'google',
+                        options: {
+                            redirectTo: window.location.origin + '/dashboard'
+                        }
+                    });
+                    if (error) {
+                        this.utils.showError('error-message', error.message);
                     }
-                });
-                if (error) {
-                    this.utils.showError('error-message', error.message);
+                } catch (err) {
+                    console.error('Google login failed:', err);
                 }
             });
         }
@@ -99,7 +103,6 @@ export class AuthModule {
                     return;
                 }
 
-                // Insert user into profiles table
                 const { error: insertError } = await supabase
                     .from('profiles')
                     .insert([{
