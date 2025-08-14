@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leaderboard - CyberCafe</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script type="module" src="/static/main.js"></script>
+</head>
+<body>
+  <div id="main-app" class="screen active">
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-left">
+          <div class="navbar-brand">
+            <svg class="navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span class="navbar-title">CyberCafe</span>
+          </div>
+          <div class="navbar-nav">
+            <button id="nav-dashboard" class="nav-button">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+              <span>Dashboard</span>
+            </button>
+            <button class="nav-button active">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                <path d="M14 9h1.5a2.5 2.5 0 0 0 0-5H14"/>
+                <path d="M6 2L14 2"/>
+                <path d="M6 16H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                <path d="M14 16h1.5a2.5 2.5 0 0 0 0-5H14"/>
+                <path d="M6 9L14 9"/>
+              </svg>
+              <span>Leaderboard</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Leaderboard Content -->
+    <div id="leaderboard" class="view active">
+      <div class="leaderboard-background">
+        <div class="bg-element bg-element-1"></div>
+        <div class="bg-element bg-element-2"></div>
+      </div>
+
+      <div class="leaderboard-container">
+        <div class="leaderboard-header">
+          <h1 class="leaderboard-title">Leaderboard</h1>
+          <p class="leaderboard-subtitle">See how you rank among the cybersecurity elite</p>
+        </div>
+
+        <div class="leaderboard-filters">
+          <button class="filter-button active" data-filter="all">All Users</button>
+          <button class="filter-button" data-filter="free">Free Tier</button>
+          <button class="filter-button" data-filter="premium">Premium</button>
+        </div>
+
+        <div id="leaderboard-list" class="leaderboard-list">
+          <!-- Leaderboard entries will be populated here -->
+        </div>
+
+        <div id="user-stats" class="user-stats-card glass">
+          <h3 class="user-stats-title">Your Stats</h3>
+          <div class="user-stats-grid">
+            <div class="user-stat">
+              <div id="user-rank" class="user-stat-value">#1</div>
+              <div class="user-stat-label">Current Rank</div>
+            </div>
+            <div class="user-stat">
+              <div id="user-total-score" class="user-stat-value">0</div>
+              <div class="user-stat-label">Total Points</div>
+            </div>
+            <div class="user-stat">
+              <div id="user-challenges-solved" class="user-stat-value">0</div>
+              <div class="user-stat-label">Challenges Solved</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Logic -->
+  <script>
+    document.getElementById('nav-dashboard')?.addEventListener('click', () => {
+      window.location.href = '/dashboard';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment - CyberCafe</title>
+  <link rel="stylesheet" href="/static/styles.css"/>
+  <script type="module" src="/static/main.js"></script>
+</head>
+<body>
+  <!-- Credit Card Form -->
+  <div id="credit-card-form" class="screen active">
+    <div class="payment-background">
+      <div class="bg-element bg-element-1"></div>
+      <div class="bg-element bg-element-2"></div>
+    </div>
+
+    <div class="payment-container">
+      <div class="payment-card glass">
+        <div class="payment-footer">
+          <a href="plans.html" class="back-link">← Back to Plans</a>
+        </div>
+
+        <h2 class="payment-title">Enter Credit Card Details</h2>
+
+        <form id="payment-form" class="payment-form-content">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="payment-email" placeholder="you@example.com" class="form-input" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Card Number</label>
+            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" class="form-input" maxlength="19" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Expiry Date (MM/YY)</label>
+            <input type="text" id="expiry" placeholder="MM/YY" class="form-input" maxlength="5" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">CVV</label>
+            <input type="password" id="cvv" placeholder="123" class="form-input" maxlength="3" required />
+          </div>
+
+          <div id="payment-error" class="error-message hidden">
+            <div class="error-indicator"></div>
+            <span class="error-text"></span>
+          </div>
+
+          <div class="payment-actions">
+            <button type="submit" id="payment-submit" class="payment-submit-button">
+              <span class="button-text">Submit Payment</span>
+              <div class="button-loader hidden">
+                <div class="spinner"></div>
+                <span>Processing...</span>
+              </div>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

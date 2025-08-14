@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Plan - CyberCafe</title>
+    <link rel="stylesheet" href="/static/styles.css">
+<script type="module" src="/static/main.js"></script>
+
+</head>
+<body>
+    <!-- Plan Selection -->
+    <div id="plan-selection" class="screen active">
+        <div class="plan-background">
+            <div class="bg-element bg-element-1"></div>
+            <div class="bg-element bg-element-2"></div>
+        </div>
+        
+        <div class="plan-container">
+            <div class="plan-header">
+                <div class="brand">
+                    <svg class="brand-icon animate-glow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <h1 class="brand-title text-glow">CyberCafe</h1>
+                </div>
+                <p class="plan-title">Elite CTF Training Platform</p>
+                <p class="plan-subtitle">Choose your path to cybersecurity mastery</p>
+            </div>
+
+            <div class="plans-grid">
+                <!-- Free Plan -->
+                <div class="plan-card" data-plan="free">
+                    <div class="plan-card-header">
+                        <div class="plan-info">
+                            <svg class="plan-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                            <h3 class="plan-name">Free Tier</h3>
+                        </div>
+                        <div class="plan-price">
+                            <span class="price-amount">$0</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                    </div>
+
+                    <div class="plan-features">
+                        <div class="feature">
+                            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Daily CTF challenges</span>
+                        </div>
+                        <div class="feature">
+                            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Score tracking & rankings</span>
+                        </div>
+                        <div class="feature">
+                            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Global leaderboard access</span>
+                        </div>
+                        <div class="feature">
+                            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Basic difficulty levels</span>
+                        </div>
+                    </div>
+
+                    <p class="plan-description">Perfect for beginners exploring cybersecurity</p>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="plan-card premium" data-plan="premium">
+                    <div class="popular-badge">MOST POPULAR</div>
+                    
+                    <div class="plan-card-header">
+                        <div class="plan-info">
+                            <svg class="plan-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 3h12l4 6-10 13L2 9l4-6z"/>
+                            </svg>
+                            <h3 class="plan-name">Premium</h3>
+                        </div>
+                        <div class="plan-price">
+                            <span class="price-amount">$5</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                    </div>
+
+                    <div class="plan-features">
+                        <div class="feature">
+                            <svg class="feature-icon premium-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Everything in Free tier</span>
+                        </div>
+                        <div class="feature">
+                            <svg class="feature-icon premium-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Detailed writeups & solutions</span>
+                        </div>
+                        <div class="feature">
+                            <svg class="feature-icon premium-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Advanced challenge categories</span>
+                        </div>
+                        <div class="feature">
+                            <svg class="feature-icon premium-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Priority support</span>
+                        </div>
+                        <div class="feature">
+                            <svg class="feature-icon premium-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Exclusive premium badge</span>
+                        </div>
+                    </div>
+
+                    <p class="plan-description">For serious cybersecurity professionals</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

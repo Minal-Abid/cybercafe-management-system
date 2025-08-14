@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - CyberCafe</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script type="module" src="/static/main.js"></script>
+</head>
+<body>
+  <!-- Auth Form -->
+  <div id="auth-form" class="screen active">
+    <div class="auth-background">
+      <div class="bg-element bg-element-1"></div>
+      <div class="bg-element bg-element-2"></div>
+    </div>
+
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="brand">
+          <svg class="brand-icon animate-glow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <h1 class="brand-title text-glow">CyberCafe</h1>
+        </div>
+        <p class="brand-subtitle">Elite CTF Training Platform</p>
+        <div class="brand-divider"></div>
+
+        <!-- ✅ Dynamic title for login/register switch -->
+        <h2 id="auth-title" class="auth-title">Welcome Back</h2>
+      </div>
+
+      <div class="auth-card glass">
+        <div class="auth-tabs">
+          <button id="login-tab" class="auth-tab active">Login</button>
+          <button id="register-tab" class="auth-tab">Register</button>
+        </div>
+
+        <form id="auth-form-element" class="auth-form-content">
+          <div id="username-field" class="form-group hidden">
+            <label class="form-label">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email" class="form-input" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" class="form-input" required />
+          </div>
+
+          <div id="error-message" class="error-message hidden">
+            <div class="error-indicator"></div>
+            <span class="error-text"></span>
+          </div>
+
+          <!-- ✅ Fixed: type="button" to avoid form conflicts -->
+          <button type="button" id="auth-submit" class="auth-button">
+            <span class="button-text">Sign In</span>
+            <div class="button-loader hidden">
+              <div class="spinner"></div>
+              <span>Processing...</span>
+            </div>
+          </button>
+        </form>
+
+        <div class="demo-account">
+          <p class="demo-title">Demo Account</p>
+          <div class="demo-credentials">
+            <p class="demo-text">
+              Email: alex@example.com<br />
+              Password: password123
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

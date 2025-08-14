@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - CyberCafe</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script type="module" src="/static/main.js"></script>
+</head>
+<body>
+  <div id="main-app" class="screen active">
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-left">
+          <div class="navbar-brand">
+            <svg class="navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span class="navbar-title">CyberCafe</span>
+            <span id="premium-badge" class="premium-badge-nav hidden">PREMIUM</span>
+          </div>
+
+          <div class="navbar-nav">
+            <button id="nav-dashboard" class="nav-button active">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+              <span>Challenges</span>
+            </button>
+
+            <button id="nav-leaderboard" class="nav-button">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                <path d="M14 9h1.5a2.5 2.5 0 0 0 0-5H14"/>
+                <path d="M6 2L14 2"/>
+                <path d="M6 16H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                <path d="M14 16h1.5a2.5 2.5 0 0 0 0-5H14"/>
+                <path d="M6 9L14 9"/>
+              </svg>
+              <span>Leaderboard</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="navbar-right">
+          <div class="user-info">
+            <div class="user-details">
+              <p id="user-name" class="user-name">User</p>
+              <p id="user-score" class="user-score">0 points</p>
+            </div>
+            <div class="user-avatar">
+              <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+          </div>
+
+          <button id="logout-button" class="logout-button" title="Logout">
+            <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+              <line x1="4" y1="22" x2="4" y2="15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="view active">
+      <div class="dashboard-background">
+        <div class="bg-element bg-element-1"></div>
+        <div class="bg-element bg-element-2"></div>
+      </div>
+
+      <div class="dashboard-container">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title text-glow">Today's Challenge</h1>
+          <p class="dashboard-subtitle">Sharpen your cybersecurity skills with daily CTF challenges</p>
+          <div class="title-divider"></div>
+        </div>
+
+        <div id="challenge-card" class="challenge-card glass">
+          <div class="challenge-header">
+            <div class="challenge-info">
+              <div class="challenge-icon-wrapper">
+                <svg class="challenge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="6"/>
+                  <circle cx="12" cy="12" r="2"/>
+                </svg>
+              </div>
+              <div class="challenge-details">
+                <h2 id="challenge-title" class="challenge-title">Loading Challenge...</h2>
+                <div class="challenge-meta">
+                  <span id="challenge-difficulty" class="difficulty-badge">EASY</span>
+                  <span id="challenge-category" class="challenge-category">Web Security</span>
+                  <div class="challenge-points">
+                    <svg class="points-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                      <path d="M14 9h1.5a2.5 2.5 0 0 0 0-5H14"/>
+                      <path d="M6 2L14 2"/>
+                      <path d="M6 16H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                      <path d="M14 16h1.5a2.5 2.5 0 0 0 0-5H14"/>
+                      <path d="M6 9L14 9"/>
+                    </svg>
+                    <span id="challenge-points">100 pts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="solved-badge" class="solved-badge hidden">
+              <svg class="solved-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                <line x1="4" y1="22" x2="4" y2="15"/>
+              </svg>
+              <span>SOLVED</span>
+            </div>
+          </div>
+
+          <div class="challenge-description">
+            <h3 class="section-title">Description</h3>
+            <p id="challenge-description-text" class="description-text">Loading challenge description...</p>
+          </div>
+
+          <form id="flag-form" class="flag-form">
+            <div class="flag-input-section">
+              <label class="form-label">Flag Submission</label>
+              <div class="flag-input-wrapper">
+                <input type="text" id="flag-input" placeholder="Enter flag (CYBER{...})" class="flag-input" required>
+                <button type="submit" id="flag-submit" class="flag-submit-button">Submit Flag</button>
+              </div>
+            </div>
+
+            <div id="submission-result" class="submission-result hidden">
+              <div class="result-indicator"></div>
+              <div class="result-content">
+                <div class="result-title"></div>
+                <div class="result-message"></div>
+              </div>
+            </div>
+          </form>
+
+          <div class="challenge-extras">
+            <div class="hints-section">
+              <button id="hints-toggle" class="extras-button">
+                <svg class="extras-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <span>Show Hints (<span id="hints-count">0</span>)</span>
+              </button>
+
+              <div id="hints-content" class="extras-content hidden">
+                <h4 class="extras-title">Hints</h4>
+                <div id="hints-list" class="hints-list">
+                  <!-- Hints will be populated here -->
+                </div>
+              </div>
+            </div>
+
+            <div class="writeup-section">
+              <button id="writeup-toggle" class="extras-button">
+                <svg id="writeup-icon" class="extras-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span id="writeup-text">Writeup (Premium + Solve Required)</span>
+              </button>
+
+              <div id="writeup-content" class="extras-content hidden">
+                <h4 class="extras-title">Solution Writeup</h4>
+                <p id="writeup-text-content" class="writeup-text">Loading writeup...</p>
+              </div>
+
+              <div id="premium-upgrade-notice" class="premium-notice hidden">
+                <p class="premium-notice-text">
+                  🚀 Upgrade to Premium to access detailed writeups after solving challenges!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-card glass">
+          <div class="progress-header">
+            <div class="progress-info">
+              <h3 class="progress-title text-glow">Your Progress</h3>
+              <p class="progress-subtitle">Keep solving challenges to climb the leaderboard</p>
+            </div>
+            <div class="progress-score">
+              <div id="total-score" class="score-value text-glow">0</div>
+              <div class="score-label">Total Points</div>
+            </div>
+          </div>
+          <div class="progress-stats">
+            <div class="stat-item">
+              <div id="challenges-solved" class="stat-value">0</div>
+              <div class="stat-label">Challenges Solved</div>
+            </div>
+            <div class="stat-item">
+              <div id="plan-status" class="stat-value">FREE</div>
+              <div class="stat-label">Plan Status</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add client-side navigation for Leaderboard -->
+  <script>
+    document.getElementById('nav-leaderboard')?.addEventListener('click', () => {
+      window.location.href = '/leaderboard';
+    });
+
+    document.getElementById('nav-dashboard')?.addEventListener('click', () => {
+      window.location.href = '/dashboard';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberCafe - Elite CTF Training Platform</title>
+    <link rel="stylesheet" href="/static/styles.css">
+<script type="module" src="/static/main.js"></script>
+
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-icon">
+                <svg class="shield-icon animate-glow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            </div>
+            <h1 class="loading-title">CyberCafe</h1>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Landing Page Content -->
+    <div id="landing-content" class="screen active">
+        <div class="landing-background">
+            <div class="bg-element bg-element-1"></div>
+            <div class="bg-element bg-element-2"></div>
+        </div>
+        
+        <div class="landing-container">
+            <div class="landing-header">
+                <div class="brand">
+                    <svg class="brand-icon animate-glow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <h1 class="brand-title text-glow">CyberCafe</h1>
+                </div>
+                <p class="brand-subtitle">Elite CTF Training Platform</p>
+                <div class="brand-divider"></div>
+            </div>
+
+            <div class="landing-content">
+                <h2 class="landing-title">Welcome to Elite Cybersecurity Training</h2>
+                <p class="landing-description">
+                    Master the art of cybersecurity through hands-on CTF challenges. 
+                    From beginner to expert, sharpen your skills with real-world scenarios.
+                </p>
+                
+                <div class="landing-features">
+                    <div class="feature">
+                        <h3>Daily Challenges</h3>
+                        <p>New CTF challenges every day across multiple categories</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Global Leaderboard</h3>
+                        <p>Compete with cybersecurity professionals worldwide</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Detailed Solutions</h3>
+                        <p>Learn from comprehensive writeups and explanations</p>
+                    </div>
+                </div>
+
+                <div class="landing-actions">
+                    <a href="auth.html" class="cta-button primary">Get Started</a>
+                    <a href="dashboard.html" class="cta-button secondary">View Demo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
