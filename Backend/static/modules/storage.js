@@ -30,24 +30,37 @@ export class StorageModule {
             return;
         }
 
+        // Try fetching profile
         const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', user.id)
             .single();
 
-        if (profileError) {
-            console.warn('No profile found, using fallback:', profileError.message);
-            this.currentUser = {
+        // ✅ If no profile exists (new Google user or missing record), create one
+        if (profileError || !profile) {
+            console.warn('No profile found — creating new profile for user:', user.email);
+
+            const newProfile = {
                 id: user.id,
-                email: user.email,
-                username: user.email.split('@')[0],
-                plan: 'free',
+                username: user.user_metadata?.full_name || user.email.split('@')[0],
                 score: 0,
-                solvedChallenges: [],
+                plan: 'free',
+                solvedChallenges: []
+            };
+
+            const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
+            if (insertError) {
+                console.error('Error creating profile:', insertError.message);
+            }
+
+            this.currentUser = {
+                ...newProfile,
+                email: user.email,
                 createdAt: user.created_at
             };
         } else {
+            // Profile exists — use it
             this.currentUser = {
                 id: user.id,
                 email: user.email,

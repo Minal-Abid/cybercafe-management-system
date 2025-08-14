@@ -25,8 +25,6 @@
         </div>
         <p class="brand-subtitle">Elite CTF Training Platform</p>
         <div class="brand-divider"></div>
-
-        <!-- ✅ Dynamic title for login/register switch -->
         <h2 id="auth-title" class="auth-title">Welcome Back</h2>
       </div>
 
@@ -57,7 +55,6 @@
             <span class="error-text"></span>
           </div>
 
-          <!-- ✅ Fixed: type="button" to avoid form conflicts -->
           <button type="button" id="auth-submit" class="auth-button">
             <span class="button-text">Sign In</span>
             <div class="button-loader hidden">
@@ -66,6 +63,14 @@
             </div>
           </button>
         </form>
+
+        <!-- Google OAuth -->
+        <div class="oauth-buttons">
+          <button type="button" id="google-login" class="google-button">
+            <img src="/static/google-icon.svg" alt="Google" class="google-icon">
+            Continue with Google
+          </button>
+        </div>
 
         <div class="demo-account">
           <p class="demo-title">Demo Account</p>

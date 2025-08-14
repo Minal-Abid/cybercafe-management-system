@@ -1,7 +1,6 @@
 // auth.js
 import { StorageModule } from './storage.js';
-import { UtilsModule } from './utils.js';
-import { supabase } from './utils.js';
+import { UtilsModule, supabase } from './utils.js';
 
 export class AuthModule {
     constructor() {
@@ -19,6 +18,7 @@ export class AuthModule {
         const loginTab = document.getElementById('login-tab');
         const registerTab = document.getElementById('register-tab');
         const authSubmit = document.getElementById('auth-submit');
+        const googleLoginBtn = document.getElementById('google-login');
 
         if (authForm) {
             authForm.addEventListener('submit', (e) => {
@@ -37,6 +37,20 @@ export class AuthModule {
 
         if (authSubmit) {
             authSubmit.addEventListener('click', () => this.handleAuthSubmit());
+        }
+
+        if (googleLoginBtn) {
+            googleLoginBtn.addEventListener('click', async () => {
+                const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin + '/dashboard'
+                    }
+                });
+                if (error) {
+                    this.utils.showError('error-message', error.message);
+                }
+            });
         }
     }
 
@@ -85,7 +99,7 @@ export class AuthModule {
                     return;
                 }
 
-                // ✅ Insert user into profiles table
+                // Insert user into profiles table
                 const { error: insertError } = await supabase
                     .from('profiles')
                     .insert([{
@@ -101,11 +115,7 @@ export class AuthModule {
                     return;
                 }
 
-                // ✅ Save pending info locally (if needed)
-                const pending = { username, email, password };
-                localStorage.setItem('pendingRegistration', JSON.stringify(pending));
-
-                // ✅ Redirect to plan selection
+                localStorage.setItem('pendingRegistration', JSON.stringify({ username, email, password }));
                 window.location.href = '/plans';
             }
         } catch (err) {
@@ -141,8 +151,8 @@ export class AuthModule {
     }
 
     async checkLoggedIn() {
-        const { data } = await supabase.auth.getUser();
-        if (data.user) {
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (sessionData.session) {
             window.location.href = '/dashboard';
         }
     }
