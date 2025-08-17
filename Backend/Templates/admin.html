@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - CyberCafe</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script type="module" src="/static/main.js"></script>
+</head>
+<body>
+  <!-- Admin Panel -->
+  <div id="admin-panel" class="screen active">
+    <div class="admin-background">
+      <div class="bg-element bg-element-1"></div>
+      <div class="bg-element bg-element-2"></div>
+    </div>
+
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1 class="text-glow">Admin Panel</h1>
+        <p>Manage users and monitor CyberCafe activity</p>
+      </div>
+
+      <!-- Users Table -->
+      <div class="glass glass-table-wrapper">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Plan</th>
+              <th>Score</th>
+              <th>Is Admin</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <!-- Populated dynamically via admin.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- (Optional) Challenges Section - we can add later -->
+      <div class="glass" style="margin-top: 30px;">
+        <h2 class="text-glow">Challenges</h2>
+        <p>Coming soon...</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
