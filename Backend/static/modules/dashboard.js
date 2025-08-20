@@ -1,3 +1,4 @@
+// dashboard.js
 import { StorageModule } from './storage.js';
 import { UtilsModule } from './utils.js';
 import { supabase } from './utils.js';
@@ -16,7 +17,6 @@ export class DashboardModule {
 
         if (!this.user) {
             window.location.href = '/auth';
-
             return;
         }
 
@@ -26,10 +26,9 @@ export class DashboardModule {
 
     setupEventListeners() {
         document.getElementById('flag-form')?.addEventListener('submit', (e) => this.handleFlagSubmit(e));
-        document.getElementById('flag-submit')?.addEventListener('click', () => this.handleFlagSubmit());
         document.getElementById('hints-toggle')?.addEventListener('click', () => this.toggleHints());
         document.getElementById('writeup-toggle')?.addEventListener('click', () => this.toggleWriteup());
-        document.getElementById('nav-leaderboard')?.addEventListener('click', () => window.location.href = 'leaderboard.html');
+        document.getElementById('nav-leaderboard')?.addEventListener('click', () => window.location.href = '/leaderboard');
         document.getElementById('logout-button')?.addEventListener('click', () => this.logout());
     }
 
@@ -43,75 +42,111 @@ export class DashboardModule {
         this.updateUserStats();
     }
 
-   async loadTodaysChallenge() {
-    try {
-        // Fetch all published challenges from Supabase
-        const { data: challenges, error } = await supabase
-            .from('challenges')
-            .select('*')
-            .eq('published', true);
+    async loadTodaysChallenge() {
+        try {
+            // Fetch all published challenges from Supabase
+            const { data: challenges, error } = await supabase
+                .from('challenges')
+                .select('*')
+                .eq('published', true);
 
-        if (error) throw error;
-        if (!challenges || challenges.length === 0) {
-            document.getElementById('challenge-title').textContent = "No challenges available.";
-            document.getElementById('challenge-description-text').textContent = "Ask the admin to add some challenges.";
-            return;
+            if (error) throw error;
+            if (!challenges || challenges.length === 0) {
+                document.getElementById('challenge-title').textContent = "No challenges available.";
+                document.getElementById('challenge-description-text').textContent = "Ask the admin to add some challenges.";
+                return;
+            }
+
+            // Select the last challenge from the fetched challenges
+            this.currentChallenge = challenges[challenges.length - 1];
+
+            // Update UI
+            document.getElementById('challenge-title').textContent = this.currentChallenge.title;
+            document.getElementById('challenge-description-text').textContent = this.currentChallenge.description;
+            document.getElementById('challenge-points').textContent = `${this.currentChallenge.points} pts`;
+            document.getElementById('challenge-category').textContent = this.currentChallenge.category;
+
+            const difficultyBadge = document.getElementById('challenge-difficulty');
+            difficultyBadge.textContent = this.currentChallenge.difficulty.toUpperCase();
+            difficultyBadge.className = `difficulty-badge ${this.currentChallenge.difficulty}`;
+
+            this.loadHints();
+
+            if (this.user?.solvedChallenges?.includes(this.currentChallenge.id.toString())) {
+                this.showSolvedBadge();
+            }
+
+            this.updateWriteupAvailability();
+        } catch (err) {
+            console.error('Error loading challenge:', err.message);
+            document.getElementById('challenge-title').textContent = "Failed to load challenge.";
         }
-
-        // Deterministic daily random challenge
-        const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
-        const seed = today.replace(/-/g, ""); // e.g. "20250820"
-        const index = parseInt(seed, 10) % challenges.length;
-
-        this.currentChallenge = challenges[index];
-
-        // Update UI
-        document.getElementById('challenge-title').textContent = this.currentChallenge.title;
-        document.getElementById('challenge-description-text').textContent = this.currentChallenge.description;
-        document.getElementById('challenge-points').textContent = `${this.currentChallenge.points} pts`;
-        document.getElementById('challenge-category').textContent = this.currentChallenge.category;
-
-        const difficultyBadge = document.getElementById('challenge-difficulty');
-        difficultyBadge.textContent = this.currentChallenge.difficulty.toUpperCase();
-        difficultyBadge.className = `difficulty-badge ${this.currentChallenge.difficulty}`;
-
-        this.loadHints();
-
-        if (this.user?.solvedChallenges?.includes(this.currentChallenge.id.toString())) {
-            this.showSolvedBadge();
-        }
-
-        this.updateWriteupAvailability();
-    } catch (err) {
-        console.error('Error loading challenge:', err.message);
-        document.getElementById('challenge-title').textContent = "Failed to load challenge.";
-    }
-}
-
-
-loadHints() {
-    const hintsList = document.getElementById('hints-list');
-    hintsList.innerHTML = '';
-
-    let hints = this.currentChallenge.hints || [];
-    if (typeof hints === 'string') {
-        try { hints = JSON.parse(hints); } catch { hints = [hints]; }
     }
 
-    hints.forEach((hint, index) => {
-        const hintDiv = document.createElement('div');
-        hintDiv.className = 'hint-item';
-        hintDiv.innerHTML = `<span class="hint-number">${index + 1}.</span><span>${hint}</span>`;
-        hintsList.appendChild(hintDiv);
-    });
+    loadHints() {
+        const hintsList = document.getElementById('hints-list');
+        hintsList.innerHTML = '';
 
-    document.getElementById('hints-count').textContent = hints.length;
-}
+        let hints = this.currentChallenge.hints || [];
+        if (typeof hints === 'string') {
+            try { hints = JSON.parse(hints); } catch { hints = [hints]; }
+        }
 
-validateFlag(flag) {
-    const expected = this.currentChallenge.flag;
-    return flag.toLowerCase() === expected.toLowerCase();
-}
+        hints.forEach((hint, index) => {
+            const hintDiv = document.createElement('div');
+            hintDiv.className = 'hint-item';
+            hintDiv.innerHTML = `<span class="hint-number">${index + 1}.</span><span>${hint}</span>`;
+            hintsList.appendChild(hintDiv);
+        });
+
+        document.getElementById('hints-count').textContent = hints.length;
+    }
+
+    async handleFlagSubmit(e) {
+        if (e) e.preventDefault();
+
+        const flagInput = document.getElementById('flag-input');
+        const flag = flagInput.value.trim();
+        if (!flag) return;
+
+        const submitButton = document.getElementById('flag-submit');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+        await this.utils.delay(1000);
+
+        const isCorrect = this.validateFlag(flag);
+        this.showSubmissionResult(isCorrect);
+
+        if (isCorrect) {
+            const alreadySolved = this.user.solvedChallenges?.includes(this.currentChallenge.id.toString());
+
+            if (!alreadySolved) {
+                this.user.score += this.currentChallenge.points;
+                this.user.solvedChallenges = [...(this.user.solvedChallenges || []), this.currentChallenge.id.toString()];
+
+                await supabase
+                    .from('profiles')
+                    .update({
+                        score: this.user.score,
+                        solvedChallenges: this.user.solvedChallenges
+                    })
+                    .eq('id', this.user.id);
+
+                flagInput.value = '';
+                this.updateUserStats();
+                this.showSolvedBadge();
+                this.updateWriteupAvailability();
+            }
+        }
+
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Flag';
+    }
+
+    validateFlag(flag) {
+        const expected = this.currentChallenge.flag;
+        return flag.toLowerCase() === expected.toLowerCase();
+    }
 
     showSubmissionResult(isCorrect) {
         const resultDiv = document.getElementById('submission-result');
@@ -158,31 +193,46 @@ validateFlag(flag) {
         if (badge) badge.classList.remove('hidden');
     }
 
-   
-
     toggleHints() {
-        const hints = document.getElementById('hints-section');
+        const hints = document.getElementById('hints-content');
         hints?.classList.toggle('hidden');
     }
 
-   toggleWriteup() {
-    const writeup = document.getElementById('writeup-section');
-    const writeupToggle = document.getElementById('writeup-toggle');
-    const writeupText = document.getElementById('writeup-text-content');
+    toggleWriteup() {
+        const writeupContent = document.getElementById('writeup-content');
+        const writeupToggle = document.getElementById('writeup-toggle');
+        const writeupText = document.getElementById('writeup-text-content');
 
-    if (!writeup || !writeupToggle || !writeupText) return;
+        if (!writeupContent || !writeupToggle || !writeupText) return;
 
-    const span = writeupToggle.querySelector('span');
-    if (!span) return;
+        const span = writeupToggle.querySelector('span');
+        if (!span) return;
 
-    if (writeup.classList.contains('hidden')) {
-        writeup.classList.remove('hidden');
-        span.textContent = 'Hide Writeup';
-        writeupText.textContent = this.currentChallenge.writeup;
-    } else {
-        writeup.classList.add('hidden');
-        span.textContent = 'Show Writeup';
+        if (writeupContent.classList.contains('hidden')) {
+            writeupContent.classList.remove('hidden');
+            span.textContent = 'Hide Writeup';
+            writeupText.textContent = this.currentChallenge.writeup || "No writeup available.";
+        } else {
+            writeupContent.classList.add('hidden');
+            span.textContent = 'Show Writeup';
+        }
     }
-}
 
+    updateWriteupAvailability() {
+        const writeupToggle = document.getElementById('writeup-toggle');
+        if (!writeupToggle) return;
+
+        const canViewWriteup = this.user.plan === 'premium' &&
+            this.user.solvedChallenges?.includes(this.currentChallenge.id.toString());
+
+        if (canViewWriteup) {
+            writeupToggle.disabled = false;
+            writeupToggle.classList.remove('disabled');
+            writeupToggle.querySelector('span').textContent = 'Show Writeup';
+        } else {
+            writeupToggle.disabled = true;
+            writeupToggle.classList.add('disabled');
+            writeupToggle.querySelector('span').textContent = 'Writeup (Premium + Solve Required)';
+        }
+    }
 }

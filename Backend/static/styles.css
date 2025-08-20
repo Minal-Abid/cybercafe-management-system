@@ -443,24 +443,18 @@ body {
 
 /* Google Login Button */
 .google-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: white;
-    color: #555;
-    font-size: 14px;
-    font-weight: 500;
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to right, var(--primary-600), var(--primary-700));
     border: none;
-    border-radius: 6px;
-    padding: 1rem; /* Match Sign In button padding */
-    border-radius: 0.375rem; /* Match Sign In button border radius */
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
-    width: 100%; /* match Sign In button width */
-    max-width: 300px; /* prevent too wide */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.2s ease-in-out;
-    margin-top: 10px; /* space from above */
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .google-button:hover {
