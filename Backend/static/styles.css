@@ -1785,3 +1785,97 @@ body {
 
 
 }
+/* Admin Table */
+.glass-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.glass-table th, .glass-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.glass-table th {
+  background: rgba(0,0,0,0.3);
+  font-weight: 600;
+}
+
+.glass-table tr:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Admin Tabs */
+.tab-section {
+  display: none;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.tab-section.active {
+  display: block;
+}
+/* Challenge form grid */
+.challenge-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.challenge-form .form-control {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px; /* Add space between form controls */
+}
+
+.challenge-form .form-control.full-width {
+  grid-column: span 2;
+}
+
+.challenge-form label {
+    font-weight: 600;
+    margin-bottom: 8px; /* Add space below labels */
+    color: var(--text-color, #fff);
+}
+
+.challenge-form input,
+.challenge-form textarea,
+.challenge-form select {
+    width: 100%; /* Ensure all inputs take full width */
+    max-width: 400px; /* Set a maximum width for uniformity */
+    height: 40px; /* Adjust height for better usability */
+    border-radius: 8px; /* Round corners */
+}
+
+.challenge-form .form-control {
+    margin-bottom: 20px; /* Increase space between form controls */
+}
+
+.challenge-form label {
+    margin-bottom: 10px; /* Increase space below labels */
+}
+
+.challenge-form textarea {
+  resize: vertical;
+}
+
+.challenge-form .checkbox-control {
+  align-items: center;
+  justify-content: center;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 30px;
+}
+
+.nav-button.secondary {
+  background: rgba(255,255,255,0.1);
+}
+

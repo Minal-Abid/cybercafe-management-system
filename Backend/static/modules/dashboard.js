@@ -43,9 +43,29 @@ export class DashboardModule {
         this.updateUserStats();
     }
 
-    loadTodaysChallenge() {
-        this.currentChallenge = this.generateTodaysChallenge();
+   async loadTodaysChallenge() {
+    try {
+        // Fetch all published challenges from Supabase
+        const { data: challenges, error } = await supabase
+            .from('challenges')
+            .select('*')
+            .eq('published', true);
 
+        if (error) throw error;
+        if (!challenges || challenges.length === 0) {
+            document.getElementById('challenge-title').textContent = "No challenges available.";
+            document.getElementById('challenge-description-text').textContent = "Ask the admin to add some challenges.";
+            return;
+        }
+
+        // Deterministic daily random challenge
+        const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+        const seed = today.replace(/-/g, ""); // e.g. "20250820"
+        const index = parseInt(seed, 10) % challenges.length;
+
+        this.currentChallenge = challenges[index];
+
+        // Update UI
         document.getElementById('challenge-title').textContent = this.currentChallenge.title;
         document.getElementById('challenge-description-text').textContent = this.currentChallenge.description;
         document.getElementById('challenge-points').textContent = `${this.currentChallenge.points} pts`;
@@ -62,83 +82,36 @@ export class DashboardModule {
         }
 
         this.updateWriteupAvailability();
+    } catch (err) {
+        console.error('Error loading challenge:', err.message);
+        document.getElementById('challenge-title').textContent = "Failed to load challenge.";
+    }
+}
+
+
+loadHints() {
+    const hintsList = document.getElementById('hints-list');
+    hintsList.innerHTML = '';
+
+    let hints = this.currentChallenge.hints || [];
+    if (typeof hints === 'string') {
+        try { hints = JSON.parse(hints); } catch { hints = [hints]; }
     }
 
-    loadHints() {
-        const hintsList = document.getElementById('hints-list');
-        hintsList.innerHTML = '';
+    hints.forEach((hint, index) => {
+        const hintDiv = document.createElement('div');
+        hintDiv.className = 'hint-item';
+        hintDiv.innerHTML = `<span class="hint-number">${index + 1}.</span><span>${hint}</span>`;
+        hintsList.appendChild(hintDiv);
+    });
 
-        this.currentChallenge.hints.forEach((hint, index) => {
-            const hintDiv = document.createElement('div');
-            hintDiv.className = 'hint-item';
-            hintDiv.innerHTML = `<span class="hint-number">${index + 1}.</span><span>${hint}</span>`;
-            hintsList.appendChild(hintDiv);
-        });
-    }
+    document.getElementById('hints-count').textContent = hints.length;
+}
 
-    updateWriteupAvailability() {
-        const writeupToggle = document.getElementById('writeup-toggle');
-
-        const canViewWriteup = this.user.plan === 'premium' &&
-            this.user.solvedChallenges?.includes(this.currentChallenge.id.toString());
-
-        if (canViewWriteup) {
-            writeupToggle.disabled = false;
-            writeupToggle.classList.remove('disabled');
-            writeupToggle.querySelector('span').textContent = 'Show Writeup';
-        } else {
-            writeupToggle.disabled = true;
-            writeupToggle.classList.add('disabled');
-            writeupToggle.querySelector('span').textContent = 'Writeup (Premium + Solve Required)';
-        }
-    }
-
-    async handleFlagSubmit(e) {
-        if (e) e.preventDefault();
-
-        const flagInput = document.getElementById('flag-input');
-        const flag = flagInput.value.trim();
-        const submitButton = document.getElementById('flag-submit');
-
-        if (!flag) return;
-
-        submitButton.disabled = true;
-        submitButton.textContent = 'Submitting...';
-        await this.utils.delay(1000);
-
-        const isCorrect = this.validateFlag(flag);
-        this.showSubmissionResult(isCorrect);
-
-        if (isCorrect) {
-            const alreadySolved = this.user.solvedChallenges?.includes(this.currentChallenge.id.toString());
-
-            if (!alreadySolved) {
-                this.user.score += this.currentChallenge.points;
-                this.user.solvedChallenges = [...(this.user.solvedChallenges || []), this.currentChallenge.id.toString()];
-
-                await supabase
-                    .from('profiles')
-                    .update({
-                        score: this.user.score,
-                        solvedChallenges: this.user.solvedChallenges
-                    })
-                    .eq('id', this.user.id);
-
-                flagInput.value = '';
-                this.updateUserStats();
-                this.showSolvedBadge();
-                this.updateWriteupAvailability();
-            }
-        }
-
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit Flag';
-    }
-
-    validateFlag(flag) {
-        const expected = this.currentChallenge.flag || 'CYBER{demo_flag_123}';
-        return flag.toLowerCase() === expected.toLowerCase();
-    }
+validateFlag(flag) {
+    const expected = this.currentChallenge.flag;
+    return flag.toLowerCase() === expected.toLowerCase();
+}
 
     showSubmissionResult(isCorrect) {
         const resultDiv = document.getElementById('submission-result');
@@ -185,67 +158,7 @@ export class DashboardModule {
         if (badge) badge.classList.remove('hidden');
     }
 
-    generateTodaysChallenge() {
-        const challenges = [
-            {
-                id: 1,
-                title: "Crack the Hash",
-                description: "Find the original text of the following hash: 5f4dcc3b5aa765d61d8327deb882cf99",
-                points: 50,
-                category: "Cryptography",
-                difficulty: "easy",
-                hints: ["It's an MD5 hash", "Common password"],
-                writeup: "The hash corresponds to 'password', a very common weak password.",
-                flag: "CYBER{password}"
-            },
-            {
-                id: 2,
-                title: "Stego Secrets",
-                description: "A secret message is hidden inside an image. Can you extract it?",
-                points: 70,
-                category: "Steganography",
-                difficulty: "medium",
-                hints: ["Try using steg tools", "Check LSB encoding"],
-                writeup: "Using a tool like zsteg or steghide can help extract hidden text from images.",
-                flag: "CYBER{hidden_msg_001}"
-            },
-            {
-                id: 3,
-                title: "SQLi Buster",
-                description: "Bypass the login form using SQL injection.",
-                points: 100,
-                category: "Web Exploitation",
-                difficulty: "hard",
-                hints: ["Use ' OR 1=1 --", "Test input fields"],
-                writeup: "This challenge demonstrates classic SQL injection bypass by manipulating WHERE clause.",
-                flag: "CYBER{sql_injection_win}"
-            },
-            {
-                id: 4,
-                title: "XSS Warrior",
-                description: "Trigger a JavaScript alert by injecting a payload.",
-                points: 60,
-                category: "Web Exploitation",
-                difficulty: "medium",
-                hints: ["<script>alert(1)</script>", "Check comment fields"],
-                writeup: "Cross-Site Scripting (XSS) can often be tested in comment forms or search bars.",
-                flag: "CYBER{xss_triggered}"
-            },
-            {
-                id: 5,
-                title: "Base64 Madness",
-                description: "Decode the following string: Q1lCRVIge3VzZV9iYXNlNjR9",
-                points: 40,
-                category: "Forensics",
-                difficulty: "easy",
-                hints: ["Use base64 decoder", "Online tools help"],
-                writeup: "Decoding reveals 'CYBER{use_base64}', which is a basic encoding method.",
-                flag: "CYBER{use_base64}"
-            }
-        ];
-
-        return challenges[Math.floor(Math.random() * challenges.length)];
-    }
+   
 
     toggleHints() {
         const hints = document.getElementById('hints-section');

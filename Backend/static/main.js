@@ -6,6 +6,7 @@ import { DashboardModule } from '/static/modules/dashboard.js';
 import { LeaderboardModule } from '/static/modules/leaderboard.js';
 import { StorageModule } from '/static/modules/storage.js';
 import { UtilsModule } from '/static/modules/utils.js';
+import { AdminModule } from '/static/modules/admin.js'; // ✅ new admin module
 
 class CyberCafeMain {
     constructor() {
@@ -17,7 +18,8 @@ class CyberCafeMain {
             dashboard: new DashboardModule(),
             leaderboard: new LeaderboardModule(),
             storage: new StorageModule(),
-            utils: new UtilsModule()
+            utils: new UtilsModule(),
+            admin: new AdminModule() // ✅ register admin module
         };
 
         this.init();
@@ -31,7 +33,8 @@ class CyberCafeMain {
             '/plans': 'plans',
             '/payment': 'payment',
             '/dashboard': 'dashboard',
-            '/leaderboard': 'leaderboard'
+            '/leaderboard': 'leaderboard',
+            '/admin': 'admin'   // ✅ detect admin page
         };
 
         return pageMap[pathname] || 'index';
@@ -41,6 +44,8 @@ class CyberCafeMain {
         await this.modules.storage.init();
 
         const user = this.modules.storage.getCurrentUser();
+        console.log("Loaded user:", user); // ✅ debug log
+        console.log("Main - user.isAdmin:", user?.isAdmin);
 
         if (this.currentPage === 'index') {
             const loadingScreen = document.getElementById('loading-screen');
@@ -56,6 +61,9 @@ class CyberCafeMain {
 
                     if (!user) {
                         window.location.href = '/auth';
+                    } else if (user.isAdmin) {   // ✅ fixed camelCase
+                    console.log("Redirecting to admin panel");
+                    window.location.href = '/admin';
                     } else if (user.plan === 'free' || user.plan === 'premium') {
                         window.location.href = '/dashboard';
                     } else {
@@ -81,6 +89,9 @@ class CyberCafeMain {
                 break;
             case 'leaderboard':
                 await this.modules.leaderboard.init();
+                break;
+            case 'admin':   // ✅ init admin module
+                await this.modules.admin.init();
                 break;
         }
     }

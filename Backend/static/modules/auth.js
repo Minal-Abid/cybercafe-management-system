@@ -45,7 +45,7 @@ export class AuthModule {
                     const { error } = await supabase.auth.signInWithOAuth({
                         provider: 'google',
                         options: {
-                            redirectTo: window.location.origin + '/dashboard'
+                            redirectTo: window.location.origin
                         }
                     });
                     if (error) {
@@ -79,7 +79,13 @@ export class AuthModule {
                 if (error) {
                     this.utils.showError('error-message', error.message);
                 } else {
-                    window.location.href = '/dashboard';
+                    await this.storage.init();
+                    const user = this.storage.getCurrentUser();
+                    if (user?.isAdmin) {
+                        window.location.href = '/admin';
+                    } else {
+                        window.location.href = '/dashboard';
+                    }
                 }
             } else {
                 if (!username || !email || !password) {
@@ -103,14 +109,17 @@ export class AuthModule {
                     return;
                 }
 
+                // ✅ Insert user into profiles with email included
                 const { error: insertError } = await supabase
                     .from('profiles')
                     .insert([{
                         id: userId,
                         username: username,
+                        email: email,   // ✅ store email
                         score: 0,
                         plan: 'free',
-                        solvedChallenges: []
+                        solvedChallenges: [],
+                        is_admin: false
                     }]);
 
                 if (insertError) {
@@ -156,7 +165,13 @@ export class AuthModule {
     async checkLoggedIn() {
         const { data: sessionData } = await supabase.auth.getSession();
         if (sessionData.session) {
-            window.location.href = '/dashboard';
+            await this.storage.init();
+            const user = this.storage.getCurrentUser();
+            if (user?.isAdmin) {
+                window.location.href = '/admin';
+            } else {
+                window.location.href = '/dashboard';
+            }
         }
     }
 }

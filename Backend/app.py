@@ -42,6 +42,11 @@ def plans_page(request: Request):
 def payment_page(request: Request):
     return templates.TemplateResponse("payment.html", {"request": request})
 
+# 🛠️ Admin Panel
+@router.get("/admin", response_class=HTMLResponse)
+def admin_page(request: Request):
+    return templates.TemplateResponse("admin.html", {"request": request})
+
 # ℹ️ About page (if needed)
 @router.get("/about", response_class=HTMLResponse)
 def about_page(request: Request):

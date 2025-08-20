@@ -30,12 +30,16 @@ export class StorageModule {
             return;
         }
 
-        // Try fetching profile
+        console.log("Fetched user:", user);
+
         const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', user.id)
             .single();
+
+        console.log("Profile fetched:", profile);
+        console.log("Profile error:", profileError);
 
         // ✅ If no profile exists (new Google user or missing record), create one
         if (profileError || !profile) {
@@ -46,7 +50,8 @@ export class StorageModule {
                 username: user.user_metadata?.full_name || user.email.split('@')[0],
                 score: 0,
                 plan: 'free',
-                solvedChallenges: []
+                solvedChallenges: [],
+                is_admin: false   // 👈 default false
             };
 
             const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
@@ -57,7 +62,8 @@ export class StorageModule {
             this.currentUser = {
                 ...newProfile,
                 email: user.email,
-                createdAt: user.created_at
+                createdAt: user.created_at,
+                isAdmin: false   // camelCase for frontend
             };
         } else {
             // Profile exists — use it
@@ -68,8 +74,11 @@ export class StorageModule {
                 plan: profile.plan || 'free',
                 score: profile.score || 0,
                 solvedChallenges: profile.solvedChallenges || [],
-                createdAt: user.created_at
+                createdAt: user.created_at,
+                isAdmin: profile.is_admin || false   // ✅ map DB -> frontend
             };
+            console.log("Storage - is_admin from DB:", profile.is_admin);
+            console.log("Storage - isAdmin set to:", this.currentUser.isAdmin);
         }
     }
 

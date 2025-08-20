@@ -1,51 +1,162 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - CyberCafe</title>
+  <title>Admin Panel</title>
   <link rel="stylesheet" href="/static/styles.css">
-  <script type="module" src="/static/main.js"></script>
+  <script type="module" src="/static/modules/admin.js"></script>
 </head>
 <body>
-  <!-- Admin Panel -->
-  <div id="admin-panel" class="screen active">
-    <div class="admin-background">
-      <div class="bg-element bg-element-1"></div>
-      <div class="bg-element bg-element-2"></div>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <div class="navbar-brand">
+          <svg class="navbar-icon" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zm0 20l10-5V9l-10 5-10-5v8l10 5z"/>
+          </svg>
+          <span class="navbar-title">CyberCafe Admin</span>
+        </div>
+        <div class="navbar-nav">
+          <button class="nav-button active" data-tab="users">
+            <span>Manage Users</span>
+          </button>
+          <button class="nav-button" data-tab="challenges">
+            <span>Manage Challenges</span>
+          </button>
+          <button class="nav-button" data-tab="leaderboard">
+            <span>Leaderboard</span>
+          </button>
+        </div>
+      </div>
+      <div class="navbar-right">
+        <div class="user-info">
+          <div class="user-avatar">
+            <svg class="avatar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5.121 17.804A9 9 0 1118.88 6.196a9 9 0 01-13.759 11.608z"/>
+            </svg>
+          </div>
+          <div class="user-details">
+            <div class="user-name">Admin</div>
+          </div>
+        </div>
+        <button id="logout-button" class="logout-button" title="Logout">
+          <svg class="logout-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 11-4 0v-1m0-8V7a2 2 0 114 0v1"/>
+          </svg>
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <div class="admin-container">
-      <div class="admin-header">
-        <h1 class="text-glow">Admin Panel</h1>
-        <p>Manage users and monitor CyberCafe activity</p>
-      </div>
+  <!-- Main Container -->
+  <main class="dashboard-container">
+    <header class="dashboard-header">
+      <h1 class="dashboard-title animate-glow">Admin Panel</h1>
+      <p class="dashboard-subtitle">Manage the CyberCafe system</p>
+      <div class="title-divider"></div>
+    </header>
 
-      <!-- Users Table -->
-      <div class="glass glass-table-wrapper">
-        <table class="glass-table">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Plan</th>
-              <th>Score</th>
-              <th>Is Admin</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="users-table-body">
-            <!-- Populated dynamically via admin.js -->
-          </tbody>
-        </table>
-      </div>
+    <!-- Tab Sections -->
+    <section id="tab-users" class="tab-section active">
+      <h2 class="section-title">Manage Users</h2>
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Plan</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="users-table-body"></tbody>
+      </table>
+    </section>
+    <!-------------------------------------------------------------->
 
-      <!-- (Optional) Challenges Section - we can add later -->
-      <div class="glass" style="margin-top: 30px;">
-        <h2 class="text-glow">Challenges</h2>
-        <p>Coming soon...</p>
-      </div>
-    </div>
-  </div>
+    <section id="tab-challenges" class="tab-section active">
+      <h2 class="section-title">Manage Challenges</h2>
+
+      <!-- Button to show the add form -->
+      <button id="show-challenge-form" class="nav-button">➕ Add Challenge</button>
+
+      <!-- Styled Challenge Form -->
+      <form id="challenge-form" style="display:none; margin-top:12px;" class="glass challenge-form">
+        <div class="form-grid">
+          <div class="form-control">
+            <label>Title *</label>
+            <input type="text" id="ch-title" required />
+          </div>
+          <div class="form-control">
+            <label>Category *</label>
+            <input type="text" id="ch-category" required />
+          </div>
+          <div class="form-control">
+            <label>Points *</label>
+            <input type="number" id="ch-points" required />
+          </div>
+          <div class="form-control">
+            <label>Difficulty *</label>
+            <select id="ch-difficulty" required>
+              <option value="easy">easy</option>
+              <option value="medium">medium</option>
+              <option value="hard">hard</option>
+            </select>
+          </div>
+          <div class="form-control full-width">
+            <label>Description *</label>
+            <textarea id="ch-description" required></textarea>
+          </div>
+          <div class="form-control full-width">
+            <label>Hint(s)</label>
+            <input type="text" id="ch-hints" placeholder="comma separated" />
+          </div>
+          <div class="form-control full-width">
+            <label>Writeup *</label>
+            <textarea id="ch-writeup" required></textarea>
+          </div>
+          <div class="form-control">
+            <label>Flag *</label>
+            <input type="text" id="ch-flag" required />
+          </div>
+          <div class="form-control checkbox-control">
+            <label><input type="checkbox" id="ch-published" checked /> Published</label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="nav-button">Save</button>
+          <button type="button" id="cancel-challenge" class="nav-button">Cancel</button>
+        </div>
+        <div id="challenge-error" class="error-message" style="display:none;"></div>
+      </form>
+
+      <!-- 🔽 Challenges Table -->
+      <h3 class="section-subtitle" style="margin-top:20px;">All Challenges</h3>
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Difficulty</th>
+            <th>Points</th>
+            <th>Published</th>
+          </tr>
+        </thead>
+        <tbody id="challenges-table-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Initialize Admin JS -->
+  <script type="module">
+    import { AdminModule } from '/static/modules/admin.js';
+    const admin = new AdminModule();
+    admin.init();
+  </script>
 </body>
 </html>
