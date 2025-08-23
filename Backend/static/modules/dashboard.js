@@ -44,7 +44,6 @@ export class DashboardModule {
 
     async loadTodaysChallenge() {
         try {
-            // Fetch all published challenges from Supabase
             const { data: challenges, error } = await supabase
                 .from('challenges')
                 .select('*')
@@ -57,7 +56,7 @@ export class DashboardModule {
                 return;
             }
 
-            // Select the last challenge from the fetched challenges
+            // Select the latest challenge (or change to random/daily if you want)
             this.currentChallenge = challenges[challenges.length - 1];
 
             // Update UI
@@ -71,11 +70,6 @@ export class DashboardModule {
             difficultyBadge.className = `difficulty-badge ${this.currentChallenge.difficulty}`;
 
             this.loadHints();
-
-            if (this.user?.solvedChallenges?.includes(this.currentChallenge.id.toString())) {
-                this.showSolvedBadge();
-            }
-
             this.updateWriteupAvailability();
         } catch (err) {
             console.error('Error loading challenge:', err.message);
@@ -118,24 +112,28 @@ export class DashboardModule {
         this.showSubmissionResult(isCorrect);
 
         if (isCorrect) {
-            const alreadySolved = this.user.solvedChallenges?.includes(this.currentChallenge.id.toString());
+            // Increment score + solvedChallenges (integer)
+            const newScore = this.user.score + this.currentChallenge.points;
+            const newSolvedCount = (this.user.solvedChallenges || 0) + 1;
 
-            if (!alreadySolved) {
-                this.user.score += this.currentChallenge.points;
-                this.user.solvedChallenges = [...(this.user.solvedChallenges || []), this.currentChallenge.id.toString()];
+            const { error } = await supabase
+                .from('profiles')
+                .update({
+                    score: newScore,
+                    solvedChallenges: newSolvedCount
+                })
+                .eq('id', this.user.id);
 
-                await supabase
-                    .from('profiles')
-                    .update({
-                        score: this.user.score,
-                        solvedChallenges: this.user.solvedChallenges
-                    })
-                    .eq('id', this.user.id);
+            if (!error) {
+                this.user.score = newScore;
+                this.user.solvedChallenges = newSolvedCount;
 
                 flagInput.value = '';
                 this.updateUserStats();
                 this.showSolvedBadge();
                 this.updateWriteupAvailability();
+            } else {
+                console.error("Error updating profile:", error.message);
             }
         }
 
@@ -168,7 +166,7 @@ export class DashboardModule {
 
     updateUserStats() {
         document.getElementById('total-score').textContent = this.user.score;
-        document.getElementById('challenges-solved').textContent = this.user.solvedChallenges?.length || 0;
+        document.getElementById('challenges-solved').textContent = this.user.solvedChallenges || 0;
         document.getElementById('plan-status').textContent = this.user.plan.toUpperCase();
     }
 
@@ -223,7 +221,7 @@ export class DashboardModule {
         if (!writeupToggle) return;
 
         const canViewWriteup = this.user.plan === 'premium' &&
-            this.user.solvedChallenges?.includes(this.currentChallenge.id.toString());
+            (this.user.solvedChallenges || 0) > 0; // simple check
 
         if (canViewWriteup) {
             writeupToggle.disabled = false;
