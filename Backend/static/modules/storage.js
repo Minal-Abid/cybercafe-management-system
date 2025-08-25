@@ -50,7 +50,7 @@ export class StorageModule {
                 username: user.user_metadata?.full_name || user.email.split('@')[0],
                 score: 0,
                 plan: 'free',
-                solvedChallenges: [],
+                solvedChallenges: 0,
                 is_admin: false   // 👈 default false
             };
 
@@ -73,7 +73,7 @@ export class StorageModule {
                 username: profile.username || user.email.split('@')[0],
                 plan: profile.plan || 'free',
                 score: profile.score || 0,
-                solvedChallenges: profile.solvedChallenges || [],
+                solvedChallenges: profile.solvedChallenges || 0,
                 createdAt: user.created_at,
                 isAdmin: profile.is_admin || false   // ✅ map DB -> frontend
             };

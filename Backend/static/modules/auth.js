@@ -118,7 +118,7 @@ export class AuthModule {
                         email: email,   // ✅ store email
                         score: 0,
                         plan: 'free',
-                        solvedChallenges: [],
+                        solvedChallenges: 0,
                         is_admin: false
                     }]);
 
@@ -128,7 +128,7 @@ export class AuthModule {
                 }
 
                 localStorage.setItem('pendingRegistration', JSON.stringify({ username, email, password }));
-                window.location.href = '/plans';
+                window.location.href = '/dashboard';
             }
         } catch (err) {
             this.utils.showError('error-message', 'Unexpected error occurred.');
