@@ -1,8 +1,9 @@
 fastapi
-uvicorn
+uvicorn[standard]
 psycopg2-binary
 python-dotenv
 pyngrok
 requests
 loguru
 jinja2
+starlette
