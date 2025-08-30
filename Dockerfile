@@ -19,10 +19,6 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # 5) Copy your whole repo in
 COPY . /app
 
-# 6) <-- THIS is the key: switch into the folder that contains main.py
-#     If your folder name is not "backend", change it here.
-WORKDIR /app/backend
-
-# 7) Expose and run
+# 6) Expose and run (✅ explicit backend.main:app)
 EXPOSE 8000
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
