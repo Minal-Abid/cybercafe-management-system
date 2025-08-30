@@ -1,28 +1,28 @@
-# Dockerfile
+# 1) Base Python image
 FROM python:3.11-slim
 
+# 2) Faster/smaller builds
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1
 
-WORKDIR /app
-
-# system deps for some packages (psycopg2 etc.)
+# 3) OS deps used by some wheels
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential curl gcc libpq-dev && \
+    build-essential curl && \
     rm -rf /var/lib/apt/lists/*
 
-# copy requirements first for better layer caching
+# 4) Start in /app and install deps
+WORKDIR /app
 COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-RUN python -m pip install --upgrade pip
-RUN pip install -r requirements.txt
+# 5) Copy your whole repo in
+COPY . /app
 
-# copy app
-COPY . .
+# 6) <-- THIS is the key: switch into the folder that contains main.py
+#     If your folder name is not "backend", change it here.
+WORKDIR /app/backend
 
-# expose default port; platforms set $PORT
+# 7) Expose and run
 EXPOSE 8000
-
-# run; use ${PORT:-8000} so host-provided PORT works
 CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
