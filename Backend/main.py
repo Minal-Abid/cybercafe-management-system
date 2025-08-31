@@ -1,3 +1,4 @@
+# Backend/main.py
 import os
 import time
 import requests
@@ -7,7 +8,8 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
-from Backend.app import router   # ✅ fixed import
+from Backend.app import router   # ✅ imports router
+from Backend.database import supabase   # ✅ supabase client
 
 load_dotenv()
 
@@ -16,34 +18,25 @@ BASE_DIR = Path(__file__).resolve().parent
 app = FastAPI()
 app.include_router(router)
 
-# Mount static files and templates using absolute paths
+# Mount static files and templates
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 @app.on_event("startup")
 async def startup_checks():
     supabase_http = os.getenv("SUPABASE_URL")
-    db_url = os.getenv("DATABASE_URL")
-
-    if not supabase_http and db_url:
-        try:
-            supabase_http = db_url.split("@")[-1].split(":")[0]
-            supabase_http = f"https://{supabase_http}"
-            logger.info("Derived HTTP host from DATABASE_URL: {}", supabase_http)
-        except Exception:
-            supabase_http = None
 
     if supabase_http:
         try:
             resp = requests.get(supabase_http, timeout=6)
             if resp.status_code == 200:
-                logger.info("✅ Supabase/DB host reachable at {}", supabase_http)
+                logger.info("✅ Supabase host reachable at {}", supabase_http)
             else:
-                logger.warning("⚠ Supabase/DB host returned status {}", resp.status_code)
+                logger.warning("⚠ Supabase returned status {}", resp.status_code)
         except Exception as e:
             logger.warning("⚠ Could not reach {} — {}", supabase_http, e)
     else:
-        logger.warning("⚠ No SUPABASE_URL or DATABASE_URL found in environment.")
+        logger.warning("⚠ No SUPABASE_URL found in environment.")
 
 def test_ssl_connection():
     try:
@@ -90,4 +83,4 @@ if __name__ == "__main__":
     else:
         logger.info("🔒 Local app starting on port %s", port)
 
-    uvicorn.run("Backend.main:app", host="0.0.0.0", port=port, reload=True)  # ✅ fixed path
+    uvicorn.run("Backend.main:app", host="0.0.0.0", port=port, reload=True)

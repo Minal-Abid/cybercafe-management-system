@@ -1,13 +1,8 @@
+# Backend/app.py
 from pathlib import Path
-from Backend import models
-from Backend.database import engine
-
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-
-# Create DB tables
-models.Base.metadata.create_all(bind=engine)
 
 router = APIRouter()
 BASE_DIR = Path(__file__).resolve().parent

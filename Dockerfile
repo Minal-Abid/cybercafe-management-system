@@ -1,23 +1,26 @@
-# Use official lightweight Python image
+# Use official Python image
 FROM python:3.11-slim
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
+# Install system dependencies (for building some Python packages)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first (for caching)
+# Copy requirements
 COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Copy app files
 COPY . .
 
-# Expose port (Render uses $PORT automatically)
+# Expose port
 EXPOSE 8000
 
-# Start the app with uvicorn (Backend/main.py as entrypoint)
-CMD ["sh", "-c", "uvicorn Backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Run app with uvicorn
+CMD ["uvicorn", "Backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,28 +1,14 @@
+# Backend/database.py
 import os
-import sqlalchemy.exc
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from supabase import create_client
 
-# Load environment variables
 load_dotenv()
 
-# Get database URL from .env
-DATABASE_URL = os.getenv("DATABASE_URL")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")  # use service role key here
 
-# Create engine
-engine = create_engine(DATABASE_URL)
+if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+    raise ValueError("❌ Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in environment")
 
-# Session factory
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Base class for models
-Base = declarative_base()
-
-# Test DB connection
-try:
-    with engine.connect() as conn:
-        print("✅ Database connection successful.")
-except sqlalchemy.exc.SQLAlchemyError as e:
-    print("❌ Database connection failed:", str(e))
+supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
