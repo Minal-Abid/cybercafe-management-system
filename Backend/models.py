@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from database import Base
+from Backend.database import Base   # <-- fixed import
 
 # Define a User table
 class User(Base):
@@ -8,4 +8,4 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
-    password = Column(String)  
+    password = Column(String)
