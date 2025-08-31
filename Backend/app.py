@@ -1,16 +1,16 @@
-# app.py
-
+from pathlib import Path
 import models
 from database import engine
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-# Create all tables
+# Create DB tables
 models.Base.metadata.create_all(bind=engine)
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+BASE_DIR = Path(__file__).resolve().parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # 🏠 Home page
 @router.get("/", response_class=HTMLResponse)
@@ -47,7 +47,7 @@ def payment_page(request: Request):
 def admin_page(request: Request):
     return templates.TemplateResponse("admin.html", {"request": request})
 
-# ℹ️ About page (if needed)
+# ℹ️ About page
 @router.get("/about", response_class=HTMLResponse)
 def about_page(request: Request):
     return templates.TemplateResponse("about.html", {"request": request})

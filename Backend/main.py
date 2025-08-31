@@ -1,34 +1,31 @@
-# main.py
 import os
 import time
 import requests
+from pathlib import Path
 from loguru import logger
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
-from app import router
+from .app import router   # ✅ fixed import
 
 load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent
 
 app = FastAPI()
 app.include_router(router)
 
-# Mount static files and templates (these must match your repo layout)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+# Mount static files and templates using absolute paths
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 @app.on_event("startup")
 async def startup_checks():
-    """
-    Simple connectivity checks. Non-fatal: we log warnings/errors but continue.
-    """
-    # Prefer explicit SUPABASE_URL (HTTP endpoint) if available
     supabase_http = os.getenv("SUPABASE_URL")
     db_url = os.getenv("DATABASE_URL")
 
     if not supabase_http and db_url:
-        # try to extract a host from DATABASE_URL: postgres://user:pass@host:port/db
         try:
             supabase_http = db_url.split("@")[-1].split(":")[0]
             supabase_http = f"https://{supabase_http}"
@@ -46,7 +43,7 @@ async def startup_checks():
         except Exception as e:
             logger.warning("⚠ Could not reach {} — {}", supabase_http, e)
     else:
-        logger.warning("⚠ No SUPABASE_URL or DATABASE_URL found in environment. Some features may break.")
+        logger.warning("⚠ No SUPABASE_URL or DATABASE_URL found in environment.")
 
 def test_ssl_connection():
     try:
@@ -59,9 +56,8 @@ def test_ssl_connection():
         return False
 
 def setup_ngrok_with_retry():
-    # ngrok is optional and only enabled if ENABLE_NGROK=true
     if os.getenv("ENABLE_NGROK", "false").lower() != "true":
-        logger.info("Ngrok disabled (ENABLE_NGROK != true). Skipping ngrok setup.")
+        logger.info("Ngrok disabled. Skipping ngrok setup.")
         return None, int(os.environ.get("PORT", 8000))
 
     try:
@@ -75,7 +71,7 @@ def setup_ngrok_with_retry():
             logger.info("Ngrok auth token set")
             time.sleep(1)
         else:
-            logger.warning("NGROK_AUTH_TOKEN not set; starting free tunnel (may be limited)")
+            logger.warning("NGROK_AUTH_TOKEN not set; starting free tunnel")
 
         port = int(os.environ.get("PORT", 8000))
         public_url = ngrok.connect(port).public_url
@@ -94,4 +90,4 @@ if __name__ == "__main__":
     else:
         logger.info("🔒 Local app starting on port %s", port)
 
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("Backend.main:app", host="0.0.0.0", port=port, reload=True)  # ✅ fixed path
