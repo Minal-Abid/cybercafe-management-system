@@ -779,7 +779,7 @@ body {
     gap: 0.5rem;
 }
 .navbar-logo {
-  height: 15px;
+  height: 48px;
   width: auto;
   margin-right: 8px;
   vertical-align: middle;
@@ -1871,7 +1871,7 @@ body {
 
 /* New logo style */
 .brand-logo {
-  width: 80px;     /* Adjust size as needed */
+  width: 200px;     /* Adjust size as needed */
   height: auto;    /* Keeps correct proportions */
   margin-right: 10px;
 }

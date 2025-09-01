@@ -40,22 +40,23 @@ export class AuthModule {
         }
 
         if (googleLoginBtn) {
-            googleLoginBtn.addEventListener('click', async () => {
-                try {
-                    const { error } = await supabase.auth.signInWithOAuth({
-                        provider: 'google',
-                        options: {
-                            redirectTo: window.location.origin
-                        }
-                    });
-                    if (error) {
-                        this.utils.showError('error-message', error.message);
-                    }
-                } catch (err) {
-                    console.error('Google login failed:', err);
+    googleLoginBtn.addEventListener('click', async () => {
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin
                 }
             });
+            if (error) {
+                this.utils.showError('error-message', error.message);
+            }
+        } catch (err) {
+            console.error('Google login failed:', err);
         }
+    });
+}
+
     }
 
     async handleAuthSubmit() {
