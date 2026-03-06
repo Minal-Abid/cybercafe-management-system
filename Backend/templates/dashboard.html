@@ -10,39 +10,27 @@
 <body>
   <div id="main-app" class="screen active">
     <!-- Navbar -->
-    <nav id="navbar" class="navbar">
-      <div class="navbar-container">
+    <nav id="navbar" class="navbar ">
+      <div class="navbar-container ">
         <div class="navbar-left">
           <div class="navbar-brand">
             <!-- ✅ Logo updated -->
-            <img src="/static/cybercafe-logo.png" alt="CyberCafe Logo" class="navbar-logo" />
-            <span id="premium-badge" class="premium-badge-nav hidden">PREMIUM</span>
+            <img src="/static/cyber.png" alt="CyberCafe Logo" class="navbar-brand" />
           </div>
 
           <div class="navbar-nav">
             <button id="nav-dashboard" class="nav-button active">
-              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <circle cx="12" cy="12" r="6"/>
-                <circle cx="12" cy="12" r="2"/>
-              </svg>
-              <span>Challenges</span>
+              
+              <span class="navbar-title">Dashboard</span>
             </button>
 
             <button id="nav-leaderboard" class="nav-button">
-              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                <path d="M14 9h1.5a2.5 2.5 0 0 0 0-5H14"/>
-                <path d="M6 2L14 2"/>
-                <path d="M6 16H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                <path d="M14 16h1.5a2.5 2.5 0 0 0 0-5H14"/>
-                <path d="M6 9L14 9"/>
-              </svg>
+              
               <span>Leaderboard</span>
             </button>
           </div>
-        </div>
-
+        
+</div>
         <div class="navbar-right">
           <div class="user-info">
             <div class="user-details">
@@ -58,13 +46,15 @@
           </div>
 
           <button id="logout-button" class="logout-button" title="Logout">
-            <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-              <line x1="4" y1="22" x2="4" y2="15"/>
+                        <svg class="logout-icon"  viewBox="0 0 400 400"  stroke="black" stroke-width="5">
+              <path d="M250,224c-4.4,0-8,3.6-8,8v24c0,4.4-3.6,8-8,8h-40c-4.4,0-8-3.6-8-8V144c0-4.4,3.6-8,8-8h40c4.4,0,8,3.6,8,8v24 c0,4.4,3.6,8,8,8s8-3.6,8-8v-24c0-13.2-10.8-24-24-24h-40c-13.2,0-24,10.8-24,24v112c0,13.2,10.8,24,24,24h40c13.2,0,24-10.8,24-24 v-24C258,227.6,254.4,224,250,224z"/>
+              <path d="M328.4,204.8c0.1-0.1,0.2-0.2,0.3-0.3c0,0,0,0,0-0.1c0.1-0.2,0.2-0.4,0.3-0.6c0.1-0.3,0.3-0.5,0.4-0.8 c0.1-0.3,0.2-0.5,0.3-0.8c0.1-0.2,0.2-0.4,0.2-0.7c0.2-1,0.2-2.1,0-3.1c0,0,0,0,0,0c0-0.2-0.1-0.4-0.2-0.7 c-0.1-0.3-0.1-0.5-0.2-0.8c0,0,0,0,0,0c-0.1-0.3-0.3-0.5-0.4-0.8c-0.1-0.2-0.2-0.4-0.3-0.6c-0.3-0.4-0.6-0.9-1-1.2l-32-32 c-3.1-3.1-8.2-3.1-11.3,0c-3.1,3.1-3.1,8.2,0,11.3l18.3,18.3H210c-4.4,0-8,3.6-8,8s3.6,8,8,8h92.7l-18.3,18.3 c-3.1,3.1-3.1,8.2,0,11.3c1.6,1.6,3.6,2.3,5.7,2.3s4.1-0.8,5.7-2.3l32-32c0,0,0,0,0,0C327.9,205.4,328.1,205.1,328.4,204.8z"/>
             </svg>
           </button>
         </div>
       </div>
+          <div class="title-divider"></div>
+
     </nav>
 
     <!-- Dashboard -->
@@ -78,7 +68,7 @@
         <div class="dashboard-header">
           <h1 class="dashboard-title text-glow">Today's Challenge</h1>
           <p class="dashboard-subtitle">Sharpen your cybersecurity skills with daily CTF challenges</p>
-          <div class="title-divider"></div>
+          
         </div>
 
         <div id="challenge-card" class="challenge-card glass">
@@ -97,14 +87,7 @@
                   <span id="challenge-difficulty" class="difficulty-badge"></span>
                   <span id="challenge-category" class="challenge-category"></span>
                   <div class="challenge-points">
-                    <svg class="points-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                      <path d="M14 9h1.5a2.5 2.5 0 0 0 0-5H14"/>
-                      <path d="M6 2L14 2"/>
-                      <path d="M6 16H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                      <path d="M14 16h1.5a2.5 2.5 0 0 0 0-5H14"/>
-                      <path d="M6 9L14 9"/>
-                    </svg>
+                    
                     <span id="challenge-points"></span>
                   </div>
                 </div>
@@ -126,7 +109,7 @@
 
           <form id="flag-form" class="flag-form">
             <div class="flag-input-section">
-              <label class="form-label">Flag Submission</label>
+              <label class="form-label" style="color:#3b261b;font-weight: 550;font-size: 1rem;">Flag Submission</label>
               <div class="flag-input-wrapper">
                 <input type="text" id="flag-input" placeholder="Enter flag (CYBER{...})" class="flag-input" required>
                 <button type="submit" id="flag-submit" class="flag-submit-button">Submit Flag</button>
@@ -145,12 +128,8 @@
           <div class="challenge-extras">
             <div class="hints-section">
               <button id="hints-toggle" class="extras-button">
-                <svg class="extras-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                  <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-                <span>Show Hints (<span id="hints-count">0</span>)</span>
+                
+                <span>SEE HINTS (<span id="hints-count">0</span>)</span>
               </button>
 
               <div id="hints-content" class="extras-content hidden">
@@ -187,7 +166,7 @@
         <div class="progress-card glass">
           <div class="progress-header">
             <div class="progress-info">
-              <h3 class="progress-title text-glow">Your Progress</h3>
+              <h3 class="progress-title ">Your Progress</h3>
               <p class="progress-subtitle">Keep solving challenges to climb the leaderboard</p>
             </div>
             <div class="progress-score">
